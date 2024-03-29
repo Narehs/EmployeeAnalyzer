@@ -12,28 +12,28 @@ public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
     private static final double MAX_EXPECTED_COEFFICIENT = 1.5;
     private static final int REPORTING_LINE_MAX_LENGTH = 4;
 
-
     public void analyzeEmployees(Map<Integer, Employee> employees) {
         Employee ceo = getCeo(employees);
         if (ceo == null) {
             return;
         }
 
-        List<Employee> managers = new ArrayList<>();
-        managers.add(ceo);
+        analyzeEmployeeHierarchy(ceo, 0);
+    }
 
-        int reportingLines = 0;
-        while (!managers.isEmpty()) {
-            List<Employee> nextLevelManagers = new ArrayList<>();
-            for (Employee manager : managers) {
-                if (manager.hasSubordinates()) {
-                    analyzeSalary(manager);
-                    nextLevelManagers.addAll(manager.subordinates());
-                }
-            }
-            reportingLineLengthChecker(nextLevelManagers, reportingLines);
-            managers = nextLevelManagers;
-            reportingLines++;
+    private void analyzeEmployeeHierarchy(Employee manager, int reportingLines) {
+
+        analyzeSalary(manager);
+
+        if (!manager.hasSubordinates()) {
+            return;
+        }
+
+        List<Employee> subordinates = manager.subordinates();
+        reportingLineLengthChecker(subordinates, reportingLines);
+
+        for (Employee subordinate : subordinates) {
+            analyzeEmployeeHierarchy(subordinate, reportingLines + 1);
         }
     }
 
