@@ -1,8 +1,6 @@
 # EmployeeAnalyzer
 
-Employee Analyzer 
-
-Project  analyzes company and its organizational structure and identify potential improvements.
+Employee Analyzer Project  analyzes company and its organizational structure and identify potential improvements.
 
 **Technology stack**
 
