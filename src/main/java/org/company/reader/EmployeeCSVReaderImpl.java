@@ -1,8 +1,8 @@
-package org.example.reader;
+package org.company.reader;
 
-import org.example.exception.CsvIOException;
-import org.example.exception.InvalidCsvStructureException;
-import org.example.model.Employee;
+import org.company.exception.CsvIOException;
+import org.company.exception.InvalidCsvStructureException;
+import org.company.model.Employee;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmployeeCSVReader {
+public class EmployeeCSVReaderImpl implements EmployeeCSVReader {
 
     private static final Integer ID_INDEX = 0;
     private static final Integer FIRST_NAME_INDEX = 1;
@@ -32,10 +32,10 @@ public class EmployeeCSVReader {
                     throw new InvalidCsvStructureException(
                             String.format("Error reading CSV file %s as it has an invalid  format and structure.", csvFile));
                 }
-                employees.put(Integer.parseInt(item[ID_INDEX]),
-                        new Employee(Integer.parseInt(item[ID_INDEX]), item[FIRST_NAME_INDEX],
-                                item[LAST_NAME_INDEX], Integer.parseInt(item[SALARY_INDEX]),
-                                item.length > 4 ? Integer.parseInt(item[MANAGER_ID_INDEX]) : null,
+                employees.put(Integer.parseInt(item[ID_INDEX].trim()),
+                        new Employee(Integer.parseInt(item[ID_INDEX]), item[FIRST_NAME_INDEX].trim(),
+                                item[LAST_NAME_INDEX], Integer.parseInt(item[SALARY_INDEX].trim()),
+                                item.length > 4 ? Integer.parseInt(item[MANAGER_ID_INDEX].trim()) : null,
                                 new ArrayList<>()));
             }
             if (employees.isEmpty()) {

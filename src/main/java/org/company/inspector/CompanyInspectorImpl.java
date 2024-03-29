@@ -1,16 +1,16 @@
-package org.example.inspector;
+package org.company.inspector;
 
-import org.example.analyzer.EmployeeAnalyzer;
-import org.example.model.Employee;
-import org.example.reader.EmployeeCSVReader;
+import org.company.analyzer.EmployeeAnalyzer;
+import org.company.model.Employee;
+import org.company.reader.EmployeeCSVReader;
 
 import java.util.Map;
 
-public class CompanyInspector {
+public class CompanyInspectorImpl implements CompanyInspector {
     private final EmployeeCSVReader csvReader;
     private final EmployeeAnalyzer employeeAnalyzer;
 
-    public CompanyInspector(EmployeeCSVReader csvReader, EmployeeAnalyzer employeeAnalyzer) {
+    public CompanyInspectorImpl(EmployeeCSVReader csvReader, EmployeeAnalyzer employeeAnalyzer) {
         this.csvReader = csvReader;
         this.employeeAnalyzer = employeeAnalyzer;
     }

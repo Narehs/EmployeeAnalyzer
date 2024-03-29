@@ -1,12 +1,11 @@
 package company.inspector;
 
-import org.example.analyzer.EmployeeAnalyzer;
-import org.example.inspector.CompanyInspector;
-import org.example.model.Employee;
-import org.example.reader.EmployeeCSVReader;
+import org.company.analyzer.EmployeeAnalyzer;
+import org.company.inspector.CompanyInspectorImpl;
+import org.company.model.Employee;
+import org.company.reader.EmployeeCSVReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,22 +14,18 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompanyInspectorTest {
-    private EmployeeCSVReader csvReader;
-    private EmployeeAnalyzer employeeAnalyzer;
-    private CompanyInspector inspector;
+    private CompanyInspectorImpl inspector;
 
     private EmployeeAnalyzerStub employeeAnalyzerStub;
 
-    private EmployeeCsvReaderStub csvReaderStub;
+    private EmployeeCsvReaderImplStub csvReaderStub;
 
 
     @BeforeEach
     void setUp() {
-        csvReaderStub = new EmployeeCsvReaderStub(createEmployees());
-        csvReader = new EmployeeCSVReader();
+        csvReaderStub = new EmployeeCsvReaderImplStub(createEmployees());
         employeeAnalyzerStub = new EmployeeAnalyzerStub(createEmployees());
-        employeeAnalyzer = new EmployeeAnalyzer();
-        inspector = new CompanyInspector(csvReader, employeeAnalyzer);
+        inspector = new CompanyInspectorImpl(csvReaderStub, employeeAnalyzerStub);
     }
 
     @Test
@@ -40,15 +35,15 @@ public class CompanyInspectorTest {
 
         inspector.analyze(csvFile);
 
-        assertEquals(csvReaderStub.readEmployeesDataFromFile(csvFile),(employees));
+        assertEquals(csvReaderStub.readEmployeesDataFromFile(csvFile), (employees));
         assertEquals(employeeAnalyzerStub.getAnalyzedEmployees(), employees);
     }
 
     private Map<Integer, Employee> createEmployees() {
         Map<Integer, Employee> employees = new HashMap<>();
-        Employee employee1 = new Employee(123, "Joe", "Doe", 60000,null, new ArrayList<>());
-        Employee employee2 = new Employee(124, "Martin", "Chekov", 45000,123, new ArrayList<>());
-        Employee employee3 = new Employee(125, "Bob", "Chekov", 47000,123, new ArrayList<>());
+        Employee employee1 = new Employee(123, "Joe", "Doe", 60000, null, new ArrayList<>());
+        Employee employee2 = new Employee(124, "Martin", "Chekov", 45000, 123, new ArrayList<>());
+        Employee employee3 = new Employee(125, "Bob", "Chekov", 47000, 123, new ArrayList<>());
         employees.put(employee1.id(), employee1);
         employees.put(employee2.id(), employee2);
         employees.put(employee3.id(), employee3);
@@ -57,7 +52,7 @@ public class CompanyInspectorTest {
 }
 
 
-class EmployeeAnalyzerStub extends EmployeeAnalyzer {
+class EmployeeAnalyzerStub implements EmployeeAnalyzer {
     private Map<Integer, Employee> analyzedEmployees;
 
     public EmployeeAnalyzerStub(Map<Integer, Employee> analyzedEmployees) {
@@ -73,11 +68,11 @@ class EmployeeAnalyzerStub extends EmployeeAnalyzer {
     }
 }
 
-class EmployeeCsvReaderStub extends EmployeeCSVReader {
+class EmployeeCsvReaderImplStub implements EmployeeCSVReader {
     private String readCsvFile;
     private Map<Integer, Employee> employees;
 
-    public EmployeeCsvReaderStub(Map<Integer, Employee> employees) {
+    public EmployeeCsvReaderImplStub(Map<Integer, Employee> employees) {
         this.employees = employees;
     }
 

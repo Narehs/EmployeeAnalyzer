@@ -1,12 +1,12 @@
-package org.example.analyzer;
+package org.company.analyzer;
 
-import org.example.model.Employee;
+import org.company.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EmployeeAnalyzer {
+public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
 
     private static final double MIN_EXPECTED_COEFFICIENT = 1.2;
     private static final double MAX_EXPECTED_COEFFICIENT = 1.5;
@@ -43,6 +43,7 @@ public class EmployeeAnalyzer {
                 .findFirst()
                 .orElse(null);
     }
+
     private void analyzeSalary(Employee currentEmployee) {
         double averageSubordinatesSalary = subordinatesAverageSalaryCalculator(currentEmployee);
         double minExpectedSalary = MIN_EXPECTED_COEFFICIENT * averageSubordinatesSalary;

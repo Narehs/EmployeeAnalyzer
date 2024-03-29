@@ -1,7 +1,8 @@
 package company.analyzer;
 
-import org.example.analyzer.EmployeeAnalyzer;
-import org.example.model.Employee;
+import org.company.analyzer.EmployeeAnalyzer;
+import org.company.analyzer.EmployeeAnalyzerImpl;
+import org.company.model.Employee;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class EmployeeAnalyzerTest {
         employees = getEmployeesMap();
         establishEmployeeManagementHierarchy();
 
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzer();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
         companyEmployeeAnalyzer.analyzeEmployees(employees);
 
         assertEquals("""
@@ -55,7 +56,7 @@ public class EmployeeAnalyzerTest {
 
         establishEmployeeManagementHierarchy();
 
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzer();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
         companyEmployeeAnalyzer.analyzeEmployees(employees);
 
         assertEquals("""
@@ -70,7 +71,7 @@ public class EmployeeAnalyzerTest {
 
     @Test
     void emptyEmployeesMapTest() {
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzer();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
         companyEmployeeAnalyzer.analyzeEmployees(Map.of());
 
         assertEquals("", outputStreamCaptor.toString().trim());

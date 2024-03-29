@@ -1,15 +1,15 @@
 package company.reader;
 
-import org.example.exception.InvalidCsvStructureException;
-import org.example.reader.EmployeeCSVReader;
+import org.company.exception.InvalidCsvStructureException;
+import org.company.reader.EmployeeCSVReaderImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EmployeeCSVReaderTest {
+public class EmployeeCSVReaderImplTest {
     @Test
     void testReadEmployeesFromFile() {
-        var csvReader = new EmployeeCSVReader();
+        var csvReader = new EmployeeCSVReaderImpl();
         var employees = csvReader.readEmployeesDataFromFile("src/test/resources/company.csv");
 
         assertNotNull(employees);
@@ -34,7 +34,7 @@ public class EmployeeCSVReaderTest {
 
     @Test
     void readEmployeesFromLargeFile() {
-        var csvReader = new EmployeeCSVReader();
+        var csvReader = new EmployeeCSVReaderImpl();
         var employees = csvReader.readEmployeesDataFromFile("src/test/resources/bigCompany.csv");
 
         assertNotNull(employees);
@@ -43,14 +43,14 @@ public class EmployeeCSVReaderTest {
 
     @Test
     void whenInvalidFileThenException() {
-        var csvReader = new EmployeeCSVReader();
+        var csvReader = new EmployeeCSVReaderImpl();
         assertThrows(InvalidCsvStructureException.class,
                 () -> csvReader.readEmployeesDataFromFile("src/test/resources/invalid.csv"));
     }
 
     @Test
     void whenIEmptyFileThenException() {
-        var csvReader = new EmployeeCSVReader();
+        var csvReader = new EmployeeCSVReaderImpl();
         assertThrows(InvalidCsvStructureException.class,
                 () -> csvReader.readEmployeesDataFromFile("src/test/resources/empty.csv"));
     }
