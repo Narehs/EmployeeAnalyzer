@@ -21,12 +21,10 @@ public class EmployeeAnalyzerTest {
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private Map<Integer, Employee> employees;
 
-
     @BeforeEach
     public void setUp() {
         System.setOut(new PrintStream(outputStreamCaptor));
     }
-
 
     @AfterEach
     public void cleanUp() {
@@ -64,7 +62,7 @@ public class EmployeeAnalyzerTest {
                         Employee id=309, John Smith earns less than expected by 20000.0.
                         Employee id=310, Anna Smith earns less than expected by 20000.0.
                         Employee id=311, Anthony Brown earns more than expected by 25000.0.
-                        Find below Employees with reporting line more than 4:
+                        Find below Employees with reporting line more by 1
                         id=313, Brad Smith""",
                 outputStreamCaptor.toString().trim());
     }

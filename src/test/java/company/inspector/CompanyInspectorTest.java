@@ -53,7 +53,7 @@ public class CompanyInspectorTest {
 
 
 class EmployeeAnalyzerStub implements EmployeeAnalyzer {
-    private Map<Integer, Employee> analyzedEmployees;
+    private final Map<Integer, Employee> analyzedEmployees;
 
     public EmployeeAnalyzerStub(Map<Integer, Employee> analyzedEmployees) {
         this.analyzedEmployees = analyzedEmployees;
@@ -70,7 +70,7 @@ class EmployeeAnalyzerStub implements EmployeeAnalyzer {
 
 class EmployeeCsvReaderImplStub implements EmployeeCSVReader {
     private String readCsvFile;
-    private Map<Integer, Employee> employees;
+    private final Map<Integer, Employee> employees;
 
     public EmployeeCsvReaderImplStub(Map<Integer, Employee> employees) {
         this.employees = employees;

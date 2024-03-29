@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Application {
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("command line argument is required");
+            System.out.println("Please provide employee information csv");
             return;
         }
 
