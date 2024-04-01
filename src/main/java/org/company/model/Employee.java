@@ -1,6 +1,7 @@
 package org.company.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public record Employee(
@@ -29,6 +30,10 @@ public record Employee(
 
     public boolean hasSubordinates() {
         return subordinates != null && !subordinates.isEmpty();
+    }
+
+    public Employee immutableCopy() {
+        return new Employee(id, firstName, lastName, salary, managerId, Collections.unmodifiableList(subordinates));
     }
 }
 

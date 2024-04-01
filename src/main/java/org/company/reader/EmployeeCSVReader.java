@@ -13,8 +13,9 @@ public interface EmployeeCSVReader {
      *
      * @param csvFile String representing the file path to the CSV file
      * @return Map of employee IDs (Integer) to Employee objects
-     * @throws CsvIOException               If there are any IO issues while processing the CSV file
-     * @throws InvalidCsvStructureException If the CSV file is empty or data is structured in an unexpected way
+     * @throws CsvIOException               if there is an I/O error reading the CSV file
+     * @throws InvalidCsvDataException      if the CSV data is invalid or incomplete
+     * @throws InvalidCsvStructureException if the CSV file structure is invalid
      */
 
     Map<Integer, Employee> readEmployeesDataFromFile(String csvFile);

@@ -1,5 +1,6 @@
 package company.reader;
 
+import org.company.exception.InvalidCsvDataException;
 import org.company.exception.InvalidCsvStructureException;
 import org.company.reader.EmployeeCSVReaderImpl;
 import org.junit.jupiter.api.Test;
@@ -53,5 +54,26 @@ public class EmployeeCSVReaderImplTest {
         var csvReader = new EmployeeCSVReaderImpl();
         assertThrows(InvalidCsvStructureException.class,
                 () -> csvReader.readEmployeesDataFromFile("src/test/resources/empty.csv"));
+    }
+
+    @Test
+    void whenBadIntFieldThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/company2.csv"));
+    }
+
+    @Test
+    void whenBadNameOrLastNameFieldThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/company3.csv"));
+    }
+
+    @Test
+    void whenBadIdFieldThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/company4.csv"));
     }
 }
