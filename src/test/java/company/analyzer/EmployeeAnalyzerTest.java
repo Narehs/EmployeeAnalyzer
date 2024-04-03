@@ -9,34 +9,62 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmployeeAnalyzerTest {
-
-    private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private Map<Integer, Employee> employees;
 
+    private PrintWriter printWriter;
+
     @BeforeEach
     public void setUp() {
-        System.setOut(new PrintStream(outputStreamCaptor));
+       printWriter = new PrintWriter(outputStreamCaptor);
     }
 
-    @AfterEach
-    public void cleanUp() {
-        System.setOut(standardOut);
+    @Test
+    void testSingleEmployeeWithNoSubordinates() {
+        Employee ceo = new Employee(1, "John", "Doe", 5000, null);
+        Map<Integer, Employee> employees = Collections.singletonMap(1, ceo);
+        EmployeeAnalyzerImpl analyzer = new EmployeeAnalyzerImpl(printWriter);
+
+        analyzer.analyzeEmployees(employees);
+
+        assertTrue(outputStreamCaptor.toString().isEmpty());
     }
 
+
+    @Test
+    void testSingleEmployeeWithSubordinates() {
+
+        Employee ceo = new Employee(1, "John", "Doe", 5000, null);
+        Employee subordinate1 = new Employee(2, "Jane", "Doe", 4000, 1);
+        Employee subordinate2 = new Employee(3, "Alice", "Smith", 6000, 1);
+
+        Map<Integer, Employee> employees = new HashMap<>();
+        employees.put(1, ceo);
+        employees.put(2, subordinate1);
+        employees.put(3, subordinate2);
+
+        EmployeeAnalyzerImpl analyzer = new EmployeeAnalyzerImpl(printWriter);
+
+        analyzer.analyzeEmployees(employees);
+
+        assertTrue(outputStreamCaptor.toString().isEmpty());
+    }
     @Test
     void EmployeeSalariesTest() {
         employees = getEmployeesMap();
         establishEmployeeManagementHierarchy();
 
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl(printWriter);
         companyEmployeeAnalyzer.analyzeEmployees(employees);
 
         assertEquals("""
@@ -54,7 +82,7 @@ public class EmployeeAnalyzerTest {
 
         establishEmployeeManagementHierarchy();
 
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl(printWriter);
         companyEmployeeAnalyzer.analyzeEmployees(employees);
 
         assertEquals("""
@@ -69,7 +97,7 @@ public class EmployeeAnalyzerTest {
 
     @Test
     void emptyEmployeesMapTest() {
-        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl();
+        EmployeeAnalyzer companyEmployeeAnalyzer = new EmployeeAnalyzerImpl(printWriter);
         companyEmployeeAnalyzer.analyzeEmployees(Map.of());
 
         assertEquals("", outputStreamCaptor.toString().trim());

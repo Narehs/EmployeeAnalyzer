@@ -2,8 +2,12 @@ package org.company.analyzer;
 
 import org.company.model.Employee;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
 
@@ -11,13 +15,19 @@ public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
     private static final double MAX_EXPECTED_COEFFICIENT = 1.5;
     private static final int REPORTING_LINE_MAX_DEPTH = 4;
 
-    public void analyzeEmployees(Map<Integer, Employee> employees) {
-        Employee ceo = getCeo(employees);
-        if (ceo == null) {
-            return;
-        }
+    private final PrintWriter printWriter;
 
-        analyzeEmployeeHierarchy(ceo, 0);
+    private final Logger logger;
+
+    public EmployeeAnalyzerImpl(PrintWriter printWriter) {
+        this.printWriter = printWriter;
+        this.logger = Logger.getLogger(EmployeeAnalyzerImpl.class.getName());
+    }
+
+    public void analyzeEmployees(Map<Integer, Employee> employees) {
+        Optional<Employee> ceo = getCeo(employees);
+        ceo.ifPresent(manager -> analyzeEmployeeHierarchy(manager, 0));
+        printWriter.flush();
     }
 
     private void analyzeEmployeeHierarchy(Employee manager, int reportingLineDepth) {
@@ -40,27 +50,26 @@ public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
         double maxExpectedSalary = MAX_EXPECTED_COEFFICIENT * averageSalary;
 
         if (currentEmployee.salary() < minExpectedSalary) {
-            System.out.printf("Employee id=%s, %s earns less than expected by %s.%n",
+            logAndPrintWarning(String.format("Employee id=%s, %s earns less than expected by %s.",
                     currentEmployee.id(),
                     currentEmployee.fullName(),
-                    minExpectedSalary - currentEmployee.salary());
-
+                    minExpectedSalary - currentEmployee.salary()));
         }
 
         if (currentEmployee.salary() > maxExpectedSalary) {
-            System.out.printf("Employee id=%s, %s earns more than expected by %s.%n",
+            logAndPrintWarning(String.format("Employee id=%s, %s earns more than expected by %s.",
                     currentEmployee.id(),
                     currentEmployee.fullName(),
-                    currentEmployee.salary() - maxExpectedSalary);
+                    currentEmployee.salary() - maxExpectedSalary));
         }
     }
 
     private void printSubordinates(Employee employee, int reportingLineDepth) {
-        System.out.printf("Find below Employees with reporting line more by %d", reportingLineDepth - REPORTING_LINE_MAX_DEPTH);
-        System.out.println();
+        printWriter.printf("Find below Employees with reporting line more by %d", reportingLineDepth - REPORTING_LINE_MAX_DEPTH);
+        printWriter.println();
         employee.subordinates().stream()
                 .map(Employee::identityInfo)
-                .forEach(System.out::println);
+                .forEach(printWriter::println);
     }
 
     private double calculateAvgSalary(List<Employee> employees) {
@@ -69,11 +78,14 @@ public class EmployeeAnalyzerImpl implements EmployeeAnalyzer {
                 .orElse(0);
     }
 
-    private Employee getCeo(Map<Integer, Employee> employees) {
+    private Optional<Employee> getCeo(Map<Integer, Employee> employees) {
         return employees.values().stream()
                 .filter(e -> e.managerId() == null)
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
+    private void logAndPrintWarning(String message) {
+        logger.warning(message);
+        printWriter.println(message);
+    }
 }

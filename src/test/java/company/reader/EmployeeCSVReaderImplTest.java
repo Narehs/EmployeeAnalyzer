@@ -1,5 +1,6 @@
 package company.reader;
 
+import org.company.exception.CsvIOException;
 import org.company.exception.InvalidCsvDataException;
 import org.company.exception.InvalidCsvStructureException;
 import org.company.reader.EmployeeCSVReaderImpl;
@@ -43,6 +44,13 @@ public class EmployeeCSVReaderImplTest {
     }
 
     @Test
+    void whenFileNotExistsThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(CsvIOException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/invaliddd.csv"));
+    }
+
+    @Test
     void whenInvalidFileThenException() {
         var csvReader = new EmployeeCSVReaderImpl();
         assertThrows(InvalidCsvStructureException.class,
@@ -52,7 +60,7 @@ public class EmployeeCSVReaderImplTest {
     @Test
     void whenIEmptyFileThenException() {
         var csvReader = new EmployeeCSVReaderImpl();
-        assertThrows(InvalidCsvStructureException.class,
+        assertThrows(InvalidCsvDataException.class,
                 () -> csvReader.readEmployeesDataFromFile("src/test/resources/empty.csv"));
     }
 
@@ -75,5 +83,47 @@ public class EmployeeCSVReaderImplTest {
         var csvReader = new EmployeeCSVReaderImpl();
         assertThrows(InvalidCsvDataException.class,
                 () -> csvReader.readEmployeesDataFromFile("src/test/resources/company4.csv"));
+    }
+
+    @Test
+    void whenFileWithExtraColumnsThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvStructureException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/extraColumns.csv"));
+    }
+
+    @Test
+    void whenFileWithShortColumnsThenException() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvStructureException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/shortColumns.csv"));
+    }
+
+    @Test
+    void testManagerIdReferenceNonExistingEmployeeId() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/managerIdReference.csv"));
+    }
+
+    @Test
+    void testFileWithMixedDataTypes() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/mixedDataType.csv"));
+    }
+
+    @Test
+    void WhenFileWithNegativeSalaryThenExseption() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/negativeSalary.csv"));
+    }
+
+    @Test
+    void testCyclicManagerRelationship() {
+        var csvReader = new EmployeeCSVReaderImpl();
+        assertThrows(InvalidCsvDataException.class,
+                () -> csvReader.readEmployeesDataFromFile("src/test/resources/cyclicManagerRealationship.csv"));
     }
 }

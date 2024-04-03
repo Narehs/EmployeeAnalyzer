@@ -1,0 +1,12 @@
+Id,firstName,lastName,salary,managerId
+120,Mike,Doe,"60000",
+123,Joe,Doe,6000s0,120
+124,1,Chekov,"45000",123
+125,Bob,Ronstad,47000,123
+300,Alice,Hasacat,50000,124
+305,Brett,Hardleaf,34000,300
+309,John,Smith,100000,124
+310,Anna,Smith,100000,309
+311,Anthony,Brown,100000,310
+312,Denis,How,390000,311
+313,Brad,Smith,10000,312
